@@ -1,0 +1,40 @@
+name: Validar notebook
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validar JSON y sintaxis de las celdas
+        run: |
+          python - <<'PY'
+          import ast
+          import json
+          from pathlib import Path
+
+          path = Path("notebooks/Tesis_LSTM_RUSLE_Lurin_v4.ipynb")
+          notebook = json.loads(path.read_text(encoding="utf-8"))
+          assert notebook["nbformat"] == 4
+
+          for index, cell in enumerate(notebook["cells"]):
+              if cell.get("cell_type") != "code":
+                  continue
+              source = "".join(cell.get("source", []))
+              source = "\n".join(
+                  line for line in source.splitlines()
+                  if not line.lstrip().startswith(("!", "%"))
+              )
+              try:
+                  ast.parse(source)
+              except SyntaxError as error:
+                  raise SyntaxError(f"Celda {index}: {error}") from error
+
+          print("Notebook válido")
+          PY
