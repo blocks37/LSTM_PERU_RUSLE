@@ -1,0 +1,41 @@
+# Entornos y cachés de Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Configuración local y credenciales
+.env
+.env.*
+!.env.example
+.config/earthengine/
+
+# Datos de entrada y archivos geoespaciales pesados
+data/*
+!data/README.md
+*.nc
+*.nc4
+*.h5
+*.hdf5
+*.tif
+*.tiff
+*.shp
+*.shx
+*.dbf
+*.prj
+*.gpkg
+
+# Resultados regenerables
+figures/*
+!figures/README.md
+outputs/*
+!outputs/README.md
+*.keras
+*.h5
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
